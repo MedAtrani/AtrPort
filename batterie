@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours sur les Batteries Lithium-ion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .subsection {
+            margin-left: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Introduction aux Batteries Lithium-ion</h1>
+    
+    <div class="section">
+        <h2>1. Composants d'une batterie lithium-ion</h2>
+        <ul>
+            <li>Anode (généralement en graphite)</li>
+            <li>Cathode (ex : oxyde de cobalt lithié LiCoO2(LCO), NMC, LFP)</li>
+            <li>Électrolyte (solvant organique avec sel de lithium)</li>
+            <li>Séparateur</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Réactions chimiques et génération de courant</h2>
+        <ul>
+            <li>Réaction à l'anode : Li → Li+ + e-</li>
+            <li>Réaction à la cathode : Li+ + CoO2 + e- → LiCoO2</li>
+            <li>Flux d'électrons dans le circuit externe</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Le C-rate (taux de charge ou de décharge)</h2>
+        <p>Le C-rate est une façon de décrire le courant auquel une batterie est chargée ou déchargée, par rapport à sa capacité nominale.</p>
+        <p>C-rate = I / Qref</p>
+    </div>
+
+    <!-- Ajoutez d'autres sections ici -->
+
+</body>
+</html>
