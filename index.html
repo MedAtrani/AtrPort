@@ -1,323 +1,321 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio de Mohamed Atrani - Ingénieur électromécanicien</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>My Colorful Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+
+
     <style>
         :root {
-            --primary-color: #3a4750;
-            --secondary-color: #00adb5;
-            --accent-color: #ff5722;
-            --text-color: #222831;
-            --bg-color: #eeeeee;
-            --card-bg: #ffffff;
+            /* Vibrant Color Palette */
+            --primary-color: #FF4757;     /* Vivid Coral Red */
+            --secondary-color: #2ED573;   /* Emerald Green */
+            --accent-color-1: #5352ED;    /* Electric Purple */
+            --accent-color-2: #FF6348;    /* Warm Orange */
+            --background-color: #F0F4F8;  /* Very Light Blue */
         }
-        
+
         body {
+            background: linear-gradient(135deg, 
+                rgba(255, 71, 87, 0.1), 
+                rgba(46, 213, 115, 0.1), 
+                rgba(83, 82, 237, 0.1)
+            );
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
         }
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-        }
-        header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        nav {
-            background-color: var(--primary-color);
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-        nav ul li {
-            margin: 0 1rem;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-        nav ul li a:hover {
-            color: var(--accent-color);
-        }
-        main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-        section {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        }
-        h2 {
-            color: var(--secondary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        h3 {
-            color: var(--primary-color);
-        }
-        .experience-grid, .education-grid, .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        .experience-card, .education-card, .project-card {
-            background-color: var(--bg-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .experience-card:hover, .education-card:hover, .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-        .skills-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .skill-tag {
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 0.5rem 1rem;
+
+        .vivid-card {
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.9), 
+                rgba(255, 255, 255, 0.7)
+            );
             border-radius: 20px;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease;
+            box-shadow: 
+                0 10px 30px rgba(83, 82, 237, 0.1),
+                0 15px 40px rgba(255, 71, 87, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            overflow: hidden;
         }
-        .skill-tag:hover {
-            background-color: var(--accent-color);
+
+        .vivid-card:hover {
+            transform: scale(1.03);
+            border-color: var(--primary-color);
+            box-shadow: 
+                0 15px 40px rgba(83, 82, 237, 0.2),
+                0 20px 50px rgba(255, 71, 87, 0.2);
         }
-        .profile-images {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 2rem;
+
+        .gradient-title {
+            background: linear-gradient(45deg, 
+                var(--primary-color), 
+                var(--accent-color-1)
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
         }
-        .profile-image {
-            width: 45%;
-            max-width: 300px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease;
-        }
-        .profile-image:hover {
-            transform: scale(1.05);
-        }
-        footer {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+
+        .skill-badge {
+            background: linear-gradient(135deg, 
+                var(--secondary-color), 
+                var(--accent-color-2)
+            );
             color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-        }
-        @media (max-width: 768px) {
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-            }
-            nav ul li {
-                margin: 0.5rem 0;
-            }
-            .profile-images {
-                flex-direction: column;
-                align-items: center;
-            }
-            .profile-image {
-                width: 80%;
-                margin-bottom: 1rem;
-            }
+            transition: transform 0.2s;
         }
 
+        .skill-badge:hover {
+            transform: scale(1.1);
+        }
 
-.education-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-}
+        .profile-image {
+            border: 4px solid transparent;
+            background: linear-gradient(45deg, 
+                var(--primary-color), 
+                var(--accent-color-1)
+            );
+            padding: 4px;
+        }
 
-
-        
+        .section-icon {
+            background: linear-gradient(45deg, 
+                var(--primary-color), 
+                var(--accent-color-1)
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
-<body>
-    <header>
-        <h1>Mohamed Atrani</h1>
-        <p>Ingénieur électromécanicien spécialisé en validation et systèmes d'énergie</p>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="#about">À propos</a></li>
-            <li><a href="#expertise">Expertise</a></li>
-            <li><a href="#experience">Expérience</a></li>
-            <li><a href="#education">Formation</a></li>
-            <li><a href="#projects">Projets</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-    <main>
-        <section id="about">
-            <h2>À propos de moi</h2>
-            <p>Je suis un ingénieur électromécanicien passionné par les systèmes énergétiques et la validation de composants pour véhicules électriques. Mon expertise couvre la validation de moteurs électriques, de batteries et d'unités de contrôle. Je m'intéresse particulièrement aux projets de recherche et j'ai démontré de solides compétences techniques et de leadership.</p>
-            
-            <div class="profile-images">
-                <img src="Image_1.png" alt="Mohamed Atrani - Portrait professionnel" class="profile-image">
-                <img src="Image_2.png" alt="Mohamed Atrani - Photo de travail" class="profile-image">
+<body class="min-h-screen py-12 px-4 lg:px-24">
+    <div class="max-w-6xl mx-auto space-y-12">
+        <!-- Dynamic Header -->
+        <header class="text-center mb-12">
+            <div class="w-48 h-48 mx-auto mb-6 profile-image rounded-full overflow-hidden">
+                <img src="C:\Users\Atrani\Desktop\portfolio\photo de moi.jpg"="Profile Picture" class="w-full h-full object-cover">
             </div>
-        </section>
-        <section id="expertise">
-            <h2>Expertise</h2>
-            <div class="skills-list">
-                <span class="skill-tag">Matlab-Simulink</span>
-                <span class="skill-tag">VBA/Python</span>
-                <span class="skill-tag">Installations photovoltaïques</span>
-                <span class="skill-tag">Powertrain</span>
-                <span class="skill-tag">Unité de contrôle de véhicule électrique</span>
-                <span class="skill-tag">Moteur électrique</span>
-                <span class="skill-tag">Protocoles de communication</span>
-                <span class="skill-tag">Système de gestion de batterie (BMS)</span>
-                <span class="skill-tag">Post-traitement des gaz</span>
-                <span class="skill-tag">Concerto / INCA / MDA / Canalyzer</span>
-            </div>
-        </section>
-        <section id="experience">
-            <h2>Expérience professionnelle</h2>
-            <div class="experience-grid">
-                <div class="experience-card">
-                    <h3>CAPGEMINI ENGINEERING</h3>
-                    <p><em>Casablanca, Maroc - Septembre 2023 à aujourd'hui</em></p>
-                    <ul>
-                        <li>Gestion d'équipes pilotes</li>
-                        <li>Ingénieur de validation de tests (BMS)</li>
-                        <li>Ingénieur de validation de tests (xEV)</li>
-                    </ul>
-                </div>
-                <div class="experience-card">
-                    <h3>FEV NA (Centre de test d'Oued Zem)</h3>
-                    <p><em>Oued Zem, Maroc - Décembre 2022</em></p>
-                    <ul>
-                        <li>Planification des demandes de tests clients</li>
-                        <li>Préparation de l'instrumentation des véhicules</li>
-                        <li>Configuration du banc à rouleaux</li>
-                        <li>Exécution des tests et analyse des données</li>
-                    </ul>
-                </div>
-                <div class="experience-card">
-                    <h3>AMEE : Agence Marocaine pour l'Efficacité Énergétique</h3>
-                    <p><em>Rabat, Maroc - Mars 2021 à Septembre 2021</em></p>
-                    <ul>
-                        <li>Conception et optimisation d'un système photovoltaïque pour une usine textile à Casablanca</li>
-                        <li>Réalisation d'études de faisabilité et d'optimisation énergétique</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+            <h1 class="text-5xl gradient-title">ATRANI MOHAMED</h1>
+            <p class="text-2xl text-gray-700 mt-2 font-light">Test Validation Engineer</p>
+        </header>
+
+        <!-- Section Grid -->
+        <div class="grid md:grid-cols-2 gap-10">
+            <!-- About Me -->
+            <section class="vivid-card p-8">
+                <h2 class="text-3xl font-bold mb-6 section-icon">
+                    <i class="fas fa-user mr-4"></i>About Me
+                </h2>
+                <p class="text-gray-800 leading-relaxed">
+                    I am an electromechanical engineer with experience in validating electric motors, batteries, and control units. I am passionate about energy systems and sustainability, with a strong interest in research projects. I possess proven technical and leadership skills.
+                </p>
+            </section>
+
+            <!-- Skills -->
+            <section class="vivid-card p-8"> 
+    <h2 class="text-3xl font-bold mb-6 section-icon">
+        <i class="fas fa-laptop-code mr-4"></i>Skills
+    </h2>
+    <div class="flex flex-wrap gap-3">
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">Matlab-Simulink</span>
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">VBA/Python</span>
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">Photovoltaic installation</span>
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">Electric Vehicle Powertrain</span>
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">Electric Vehicle Control Unit</span>
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">Electric motor</span>
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">Battery management system</span>
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">Gas after-treatment</span>
+        <span class="skill-badge px-4 py-2 rounded-full text-sm">Concerto/INCA/MDA/Canalyzer</span>
+    </div>
+</section>
 
 
-        
-       <section id="education">
-    <h2>Formation</h2>
-    <div class="education-grid">
-        <div class="education-card">
-            <h3>Doctorat en Philosophie (PhD)</h3>
-            <p><em>École Nationale Supérieure d'Informatique et d'Analyse des Systèmes (ENSIAS)</em></p>
-            <p>2023 - 2026 (en cours)</p>
+           <!-- Professional Experience -->
+<section class="vivid-card p-8">
+    <h2 class="text-3xl font-bold mb-6 section-icon">
+        <i class="fas fa-briefcase mr-4"></i>Professional Experience
+    </h2>
+    <div class="space-y-4">
+        <!-- CAPGEMINI ENGINEERING -->
+        <div>
+            <h3 class="text-xl font-semibold text-primary-color">Battery Storage & Motor Test Validation Engineer - CAPGEMINI ENGINEERING</h3>
+            <p class="text-sm text-gray-600">September 2023 - Present | Casablanca, Morocco</p>
+            <ul class="list-disc list-inside text-sm mt-2 text-gray-800">
+                <li>Manage workload scheduling and monitor the completion of deliverables.</li>
+                <li>Prepare training plans and provide technical assistance to new consultants.</li>
+                <li>Conduct automotive field training sessions and maintain client communication.</li>
+                <li>Prepare weekly reports on testing procedures and KPIs.</li>
+                <li>Ensure compliance with battery test procedures and analyze BMS data for quality validation.</li>
+                <li>Identify and resolve motor control unit issues using Concerto and validate systems against specified requirements.</li>
+            </ul>
         </div>
-        <div class="education-card">
-            <h3>Diplôme d'Ingénieur d'État en Électromécanique</h3>
-            <p><em>École Nationale Supérieure des Mines de Rabat (Ex : ENIM)</em></p>
-            <p>2019 - 2022</p>
+
+        <!-- FEV NA Testing Center -->
+        <div>
+            <h3 class="text-xl font-semibold text-primary-color">Test Engineer - FEV NA Testing Center</h3>
+            <p class="text-sm text-gray-600">December 2022 | Oued Zem, Morocco</p>
+            <ul class="list-disc list-inside text-sm mt-2 text-gray-800">
+                <li>Scheduled customer test requests and prepared benches and gas analyzers to meet specifications.</li>
+                <li>Performed emissions testing (NOx, PM, CO, THC, CO2) in line with established protocols.</li>
+                <li>Processed and analyzed test data to detect deviations or potential issues in emissions data.</li>
+                <li>Prepared and wrote detailed test result reports for client review.</li>
+            </ul>
         </div>
-        <div class="education-card">
-            <h3>Classes Préparatoires aux Grandes Écoles (CPGE) - TSI</h3>
-            <p><em>Lycée Technique Cettat</em></p>
-            <p>2017 - 2019</p>
-        </div>
-        <div class="education-card">
-            <h3>Baccalauréat en Sciences et Technologies Électriques</h3>
-            <p><em>Lycée Moulay Ismail, Meknès</em></p>
-            <p>2016 - 2017</p>
+
+        <!-- Moroccan Agency for Energy Efficiency -->
+        <div>
+            <h3 class="text-xl font-semibold text-primary-color">Design Engineer - Moroccan Agency for Energy Efficiency (AMEE)</h3>
+            <p class="text-sm text-gray-600">March 2021 - September 2021 | Rabat, Morocco</p>
+            <ul class="list-disc list-inside text-sm mt-2 text-gray-800">
+                <li>Designed and optimized a photovoltaic system for a textile factory in Casablanca.</li>
+                <li>Conducted feasibility studies and estimated the system's required energy size and energy production.</li>
+                <li>Integrated energy efficiency measures while ensuring adherence to local financial and regulatory guidelines.</li>
+                <li>Ensured the financial viability of renewable energy projects through systematic analysis and design.</li>
+            </ul>
         </div>
     </div>
 </section>
 
-        
-        <section id="projects">
-            <h2>Projets clés</h2>
-            <div class="projects-grid">
-                
-                <div class="project-card">
-    <h3><a href="Batterie.html">Validation de systèmes de gestion de batterie (BMS)</a></h3>
-    <p>Chez Capgemini Engineering :</p>
-    <ul>
-        <li>Suivi des procédures de test des fournisseurs</li>
-        <li>Analyse des tests de cyclage, capacité et résistance interne</li>
-        <li>Rapports hebdomadaires et mensuels sur les KPI</li>
-    </ul>
-               </div>
 
-                <div class="project-card">
-                    <h3>Validation de véhicules électriques (xEV)</h3>
-                    <p>Chez Capgemini Engineering :</p>
-                    <ul>
-                        <li>Résolution de problèmes liés à la limitation du couple</li>
-                        <li>Validation des fonctionnalités de l'unité de contrôle du véhicule</li>
-                        <li>Préparation de rapports détaillés et de synthèses de tests</li>
-                    </ul>
-                </div>
-                <div class="project-card">
-                    <h3>Optimisation photovoltaïque pour une usine textile</h3>
-                    <p>À l'AMEE :</p>
-                    <ul>
-                        <li>Étude de faisabilité et dimensionnement du système</li>
-                        <li>Estimation de la production énergétique</li>
-                        <li>Intégration de mesures d'efficacité énergétique</li>
-                    </ul>
-                </div>
+          <!-- Education -->
+<section class="vivid-card p-8">
+    <h2 class="text-2xl font-bold mb-6 section-icon">
+        <i class="fas fa-graduation-cap mr-4"></i>Education
+    </h2>
+    <div class="mb-6">
+        <!-- Doctor of Philosophy -->
+        <h3 class="text-lg font-semibold text-secondary-color">Doctor of Philosophy (PhD) en Électrique</h3>
+        <p class="text-sm text-gray-600">École Nationale Supérieure d'Informatique et d'Analyse des Systèmes - ENSIAS | 2023 - 2026</p>
+        <p class="text-sm text-gray-600">Sujet : Commande avancée d'un véhicule électrique</p>
+    </div>
+    <div class="mb-6">
+        <!-- Diplôme d'Ingénieur -->
+        <h3 class="text-lg font-semibold text-secondary-color">Diplôme d'Ingénieur en Électromécanique</h3>
+        <p class="text-sm text-gray-600">École Nationale Supérieure des Mines de Rabat (ex : ENIM) | 2019 - 2022</p>
+    </div>
+    <div class="mb-6">
+        <!-- CPGE -->
+        <h3 class="text-lg font-semibold text-secondary-color">Classes préparatoires aux grandes écoles (CPGE)</h3>
+        <p class="text-sm text-gray-600">Technologie et sciences industrielles | 2017 - 2019</p>
+    </div>
+    <div class="mb-6">
+        <!-- Baccalauréat -->
+        <h3 class="text-lg font-semibold text-secondary-color">Baccalauréat en Sciences Électriques et Technologies</h3>
+        <p class="text-sm text-gray-600">Lycée Moulay Ismail, Meknès | 2016 - 2017</p>
+    </div>
+    <div class="mt-6">
+        <!-- Certifications -->
+        <h3 class="text-lg font-semibold text-secondary-color">Certifications</h3>
+        <ul class="list-disc ml-6">
+            <li class="text-sm text-gray-600">Renewable Energy</li>
+            <li class="text-sm text-gray-600">Hydrogen and Energy Storage</li>
+        </ul>
+    </div>
+</section>
+
+
+          <!-- Projects -->
+<section class="vivid-card p-8 md:col-span-2">
+    <h2 class="text-3xl font-bold mb-8 section-icon text-center">
+        <i class="fas fa-project-diagram mr-4"></i>Projects
+    </h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Battery Project -->
+        <div onclick="window.location.href='battery.html'" 
+             class="project-card bg-white p-6 rounded-lg shadow-lg transition-all duration-300 cursor-pointer relative 
+                    hover:ring-4 hover:ring-blue-300 hover:bg-blue-50 hover:shadow-xl group">
+            <h3 class="font-bold mb-3 text-blue-700 text-xl group-hover:text-blue-900 transition-colors">Battery Project</h3>
+            <p class="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                Includes battery testing procedures, theoretical courses, research articles, and simulations for battery and BMS development.
+            </p>
+            <div class="absolute bottom-4 right-4 text-sm font-semibold text-blue-600 group-hover:text-blue-800 hover:underline transition-colors">
+                Explore Project →
             </div>
-        </section>
-        <section id="contact">
-            <h2>Contactez-moi</h2>
-             <p>Email: <a href="mailto:mohamedatrani7@gmail.com">mohamedatrani7@gmail.com</a></p>
-            <p>LinkedIn: <a href="https://www.linkedin.com/in/mohamed-atrani-bb0a821ab/" target="_blank">linkedin.com/in/mohamed-atrani-bb0a821ab/</a></p>
-            <p>Téléphone: +212635666983</p>
-            <p>Adresse: Rue Atlass, Ain Leuh</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 Mohamed Atrani - Tous droits réservés</p>
-    </footer>
+        </div>
+
+        <!-- Motor Project -->
+        <div onclick="window.location.href='motor.html'" 
+             class="project-card bg-white p-6 rounded-lg shadow-lg transition-all duration-300 cursor-pointer relative 
+                    hover:ring-4 hover:ring-green-300 hover:bg-green-50 hover:shadow-xl group">
+            <h3 class="font-bold mb-3 text-green-700 text-xl group-hover:text-green-900 transition-colors">Motor Project</h3>
+            <p class="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                Contains motor testing procedures, articles, simulations, and control methods for microcontroller implementation.
+            </p>
+            <div class="absolute bottom-4 right-4 text-sm font-semibold text-green-600 group-hover:text-green-800 hover:underline transition-colors">
+                Explore Project →
+            </div>
+        </div>
+
+        <!-- Renewable Energy Project -->
+        <div onclick="window.location.href='renewable-energy.html'" 
+             class="project-card bg-white p-6 rounded-lg shadow-lg transition-all duration-300 cursor-pointer relative 
+                    hover:ring-4 hover:ring-purple-300 hover:bg-purple-50 hover:shadow-xl group">
+            <h3 class="font-bold mb-3 text-purple-700 text-xl group-hover:text-purple-900 transition-colors">Renewable Energy Project</h3>
+            <p class="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                Contains courses, articles, and simulations on renewable energy systems.
+            </p>
+            <div class="absolute bottom-4 right-4 text-sm font-semibold text-purple-600 group-hover:text-purple-800 hover:underline transition-colors">
+                Explore Project →
+            </div>
+        </div>
+
+        <!-- Excel Tools Project -->
+        <div onclick="window.location.href='excel-tools.html'" 
+             class="project-card bg-white p-6 rounded-lg shadow-lg transition-all duration-300 cursor-pointer relative 
+                    hover:ring-4 hover:ring-orange-300 hover:bg-orange-50 hover:shadow-xl group">
+            <h3 class="font-bold mb-3 text-orange-700 text-xl group-hover:text-orange-900 transition-colors">Excel Tools Project</h3>
+            <p class="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                Features dashboards, automation tools, and custom macros to enhance productivity and data analysis.
+            </p>
+            <div class="absolute bottom-4 right-4 text-sm font-semibold text-orange-600 group-hover:text-orange-800 hover:underline transition-colors">
+                Explore Project →
+            </div>
+        </div>
+    </div>
+</section>
+
+
+          <!-- Contact -->
+<section class="vivid-card p-8 md:col-span-2 text-center">
+    <h2 class="text-3xl font-bold mb-8 section-icon">
+        <i class="fas fa-address-card mr-4 text-blue-500"></i>Contact
+    </h2>
+    <div class="space-y-2">
+        <!-- Téléphone -->
+        <div>
+            <a href="tel:0635666983" class="hover:text-blue-500 transition-all flex items-center">
+                <i class="fas fa-phone-alt text-lg mr-2 text-green-500"></i> Téléphone : +212635666983
+            </a>
+        </div>
+        <!-- Email -->
+        <div>
+            <a href="mailto:mohamedatrani7@gmail.com" class="hover:text-blue-500 transition-all flex items-center">
+                <i class="fas fa-envelope text-lg mr-2 text-red-500"></i> Email : mohamedatrani7@gmail.com
+            </a>
+        </div>
+        <!-- LinkedIn -->
+        <div>
+            <a href="https://www.linkedin.com/in/mohamed-atrani-bb0a821ab/" target="_blank" class="hover:text-blue-500 transition-all flex items-center">
+                <i class="fab fa-linkedin text-lg mr-2 text-blue-700"></i> LinkedIn : Mohamed Atrani
+            </a>
+        </div>
+        <!-- Adresse -->
+        <div>
+            <a class="hover:text-blue-500 transition-all flex items-center">
+                <i class="fas fa-map-marker-alt text-lg mr-2 text-orange-500"></i> Adresse : Sidi Maârouf, Casablanca, Maroc
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+        </div>
+    </div>
 </body>
 </html>
