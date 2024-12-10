@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Planner & Goals</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #ececec, #d3d3f3);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .planner, .objectives {
+            background-color: white;
+            width: 50%;
+            border-radius: 16px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .planner:hover, .objectives:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+        .task-input, .objective-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .task-input input, .objective-input input, 
+        .task-input select, .objective-input select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: #6c63ff;
+        }
+        button {
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #554bd8;
+        }
+        .task-list, .objective-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .task, .objective {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #fdfdfd, #f0f0ff);
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .task:hover, .objective:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .task-time, .objective-category {
+            font-weight: bold;
+            margin-right: 15px;
+            color: #555;
+        }
+        .task-status, .objective-status {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #ccc;
+            border-radius: 50%;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .task-status.completed, .objective-status.completed {
+            background-color: #4caf50;
+            border-color: #4caf50;
+        }
+        .task-description, .objective-description {
+            flex-grow: 1;
+            font-size: 1rem;
+        }
+        .task-description.completed, .objective-description.completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .task-priority, .objective-progress {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: capitalize;
+        }
+        .task-actions, .objective-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .priority-low { background-color: #8bc34a; color: white; }
+        .priority-medium { background-color: #ffc107; color: black; }
+        .priority-high { background-color: #ff9800; color: white; }
+        .priority-urgent { background-color: #f44336; color: white; }
+        .btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.7;
+            font-size: 1.2rem;
+        }
+        .btn:hover {
+            opacity: 1;
+        }
+        .btn-edit { color: #4caf50; }
+        .btn-delete { color: #f44336; }
+        .progress-bar {
+            width: 120px;
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #4caf50;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="planner">
+            <h1>📅 Daily Planner</h1>
+            <div class="task-input">
+                <input type="time" id="taskTime" placeholder="Heure">
+                <input type="text" id="taskDescription" placeholder="Description de la tâche">
+                <select id="taskPriority">
+                    <option value="basse">Low</option>
+                    <option value="moyenne">Medium</option>
+                    <option value="haute">High</option>
+                    <option value="tres-haute">Very High</option>
+                </select>
+                <button onclick="addTask()">➕</button>
+            </div>
+            <div id="taskList" class="task-list"></div>
+        </div>
+
+        <div class="objectives">
+            <h1>🎯 My Goals</h1>
+            <div class="objective-input">
+                <input type="text" id="objectiveTitle" placeholder="Titre de l'objectif">
+                <select id="objectiveCategory">
+                    <option value="Health">Health</option>
+                    <option value="Career">Career</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Learning">Learning</option>
+                </select>
+                <button onclick="addObjective()">➕</button>
+            </div>
+            <div id="objectiveList" class="objective-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion des tâches
+        const tasks = JSON.parse(localStorage.getItem('dailyTasks')) || [];
+
+        function addTask() {
+            const time = document.getElementById('taskTime').value;
+            const description = document.getElementById('taskDescription').value;
+            const priority = document.getElementById('taskPriority').value;
+
+            if (time && description) {
+                tasks.push({ time, description, priority, completed: false });
+                renderTasks();
+                document.getElementById('taskTime').value = '';
+                document.getElementById('taskDescription').value = '';
+            }
+        }
+
+        function toggleTask(index) {
+            tasks[index].completed = !tasks[index].completed;
+            renderTasks();
+        }
+
+        function editTask(index) {
+            const newDescription = prompt('Edit the task :', tasks[index].description);
+            if (newDescription !== null) {
+                tasks[index].description = newDescription;
+                renderTasks();
+            }
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                taskList.innerHTML += `
+                    <div class="task">
+                        <span class="task-time">${task.time}</span>
+                        <div class="task-status ${task.completed ? 'completed' : ''}" onclick="toggleTask(${index})"></div>
+                        <div class="task-description ${task.completed ? 'completed' : ''}">${task.description}</div>
+                        <span class="task-priority priority-${task.priority}">${task.priority}</span>
+                        <div class="task-actions">
+                            <button class="btn btn-edit" onclick="editTask(${index})">✏️</button>
+                            <button class="btn btn-delete" onclick="deleteTask(${index})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            localStorage.setItem('dailyTasks', JSON.stringify(tasks));
+        }
+
+        // Gestion des objectifs
+        const objectives = JSON.parse(localStorage.getItem('objectives')) || [];
+
+        function addObjective() {
+            const title = document.getElementById('objectiveTitle').value;
+            const category = document.getElementById('objectiveCategory').value;
+
+            if (title) {
+                objectives.push({ title, category, progress: 0, completed: false });
+                renderObjectives();
+                document.getElementById('objectiveTitle').value = '';
+            }
+        }
+
+        function toggleObjective(index) {
+            objectives[index].completed = !objectives[index].completed;
+            renderObjectives();
+        }
+
+        function editObjective(index) {
+            const newProgress = parseInt(prompt('Enter the progress percentage (0-100) :', objectives[index].progress));
+            if (!isNaN(newProgress) && newProgress >= 0 && newProgress <= 100) {
+                objectives[index].progress = newProgress;
+                objectives[index].completed = newProgress === 100;
+                renderObjectives();
+            }
+        }
+
+        function deleteObjective(index) {
+            objectives.splice(index, 1);
+            renderObjectives();
+        }
+
+        function renderObjectives() {
+            const objectiveList = document.getElementById('objectiveList');
+            objectiveList.innerHTML = '';
+            objectives.forEach((objective, index) => {
+                objectiveList.innerHTML += `
+                    <div class="objective">
+                        <span class="objective-category">${objective.category}</span>
+                        <div class="objective-status ${objective.completed ? 'completed' : ''}" onclick="toggleObjective(${index})"></div>
+                        <div class="objective-description ${objective.completed ? 'completed' : ''}">${objective.title}</div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill" style="width: ${objective.progress}%"></div>
+                        </div>
+                        <span class="objective-progress">${objective.progress}%</span>
+                        <div class="objective-actions">
+                            <button class="btn btn-edit" onclick="editObjective(${index})">📊</button>
+                            <button class="btn btn-delete" onclick="deleteObjective(${index})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            localStorage.setItem('objectives', JSON.stringify(objectives));
+        }
+
+        // Initialisation
+        renderTasks();
+        renderObjectives();
+    </script>
+</body>
+</html>
