@@ -93,23 +93,154 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        :root {
+    --menu-bg: rgba(248, 248, 248, 0.85);
+    --menu-hover: rgba(0, 122, 255, 0.1);
+    --menu-active: #007AFF;
+    --menu-text: #333;
+    --menu-border: rgba(0, 0, 0, 0.08);
+    --menu-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Reset de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+}
+
+/* Menu bouton */
+.menu-container {
+    position: fixed; /* Fixe le menu en haut à droite */
+    top: 15px;
+    right: 15px;
+    z-index: 1000; /* S'assure qu'il est au-dessus des autres éléments */
+}
+
+.hamburger-menu {
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px 15px;
+    background: var(--menu-bg);
+    border: 1px solid var(--menu-border);
+    border-radius: 5px;
+    box-shadow: 0 2px 6px var(--menu-shadow);
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--menu-text);
+    transition: background 0.3s ease;
+}
+
+.hamburger-menu:hover {
+    background: var(--menu-hover);
+}
+
+/* Menu déroulant */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0; /* Aligne le menu à droite du bouton */
+    margin-top: 5px;
+    padding: 10px 0;
+    background: var(--menu-bg);
+    border: 1px solid var(--menu-border);
+    border-radius: 5px;
+    box-shadow: 0 4px 6px var(--menu-shadow);
+    z-index: 1000;
+}
+
+.dropdown-menu li {
+    list-style: none;
+}
+
+.dropdown-menu li a {
+    display: block;
+    text-decoration: none;
+    padding: 10px 20px;
+    color: var(--menu-text);
+    transition: background 0.3s ease;
+}
+
+.dropdown-menu li a:hover {
+    background: var(--menu-hover);
+}
+
+/* Affichage du menu au clic */
+.menu-container:hover .dropdown-menu {
+    display: block;
+}
+
+
+
+
+
     </style>
 </head>
 <body class="min-h-screen py-12 px-4 lg:px-24">
     <div class="max-w-6xl mx-auto space-y-12">
         <!-- Dynamic Header -->
-        <header class="text-center mb-12">
-            <div class="w-48 h-48 mx-auto mb-6 profile-image rounded-full overflow-hidden">
-                <img src="Image_2.png"="Profile Picture" class="w-full h-full object-cover">
+        
+
+            <div class="max-w-6xl mx-auto space-y-12">
+                <!-- Dynamic Header -->
+                <header class="text-center mb-12">
+                    <div class="w-48 h-48 mx-auto mb-6 profile-image rounded-full overflow-hidden">
+                        <img src="Image_2.png"="Profile Picture" class="w-full h-full object-cover">
+                    </div>
+                    <h1 class="text-5xl gradient-title">ATRANI MOHAMED</h1>
+                    <p class="text-2xl text-gray-700 mt-2 font-light">Test Validation Engineer</p>
+
+
+            <!-- Navigation Menu -->
+            <div class="menu-container">
+                <!-- Bouton Menu -->
+                <div class="hamburger-menu">☰</div>
+            
+                <!-- Menu déroulant -->
+                <ul class="dropdown-menu">
+                    <li><a href="#about">About Me</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
             </div>
-            <h1 class="text-5xl gradient-title">ATRANI MOHAMED</h1>
-            <p class="text-2xl text-gray-700 mt-2 font-light">Test Validation Engineer</p>
+            
+            
+            
+        
+          
         </header>
 
         <!-- Section Grid -->
         <div class="grid md:grid-cols-2 gap-10">
             <!-- About Me -->
-            <section class="vivid-card p-8">
+            <section id="about" class="vivid-card p-8">
                 <h2 class="text-3xl font-bold mb-6 section-icon">
                     <i class="fas fa-user mr-4"></i>About Me
                 </h2>
@@ -119,10 +250,10 @@
             </section>
 
             <!-- Skills -->
-            <section class="vivid-card p-8"> 
-    <h2 class="text-3xl font-bold mb-6 section-icon">
-        <i class="fas fa-laptop-code mr-4"></i>Skills
-    </h2>
+            <section id="skills" class="vivid-card p-8"> 
+                <h2 class="text-3xl font-bold mb-6 section-icon">
+                    <i class="fas fa-laptop-code mr-4"></i>Skills
+                </h2>
     <div class="flex flex-wrap gap-3">
         <span class="skill-badge px-4 py-2 rounded-full text-sm">Matlab-Simulink</span>
         <span class="skill-badge px-4 py-2 rounded-full text-sm">VBA/Python</span>
@@ -138,10 +269,10 @@
 
 
            <!-- Professional Experience -->
-<section class="vivid-card p-8">
-    <h2 class="text-3xl font-bold mb-6 section-icon">
-        <i class="fas fa-briefcase mr-4"></i>Professional Experience
-    </h2>
+           <section id="experience" class="vivid-card p-8">
+            <h2 class="text-3xl font-bold mb-6 section-icon">
+                <i class="fas fa-briefcase mr-4"></i>Professional Experience
+            </h2>>
     <div class="space-y-4">
         <!-- CAPGEMINI ENGINEERING -->
         <div>
@@ -185,10 +316,10 @@
 
 
           <!-- Education -->
-<section class="vivid-card p-8">
-    <h2 class="text-2xl font-bold mb-6 section-icon">
-        <i class="fas fa-graduation-cap mr-4"></i>Education
-    </h2>
+          <section id="education" class="vivid-card p-8">
+            <h2 class="text-3xl font-bold mb-6 section-icon">
+                <i class="fas fa-graduation-cap mr-4"></i>Education
+            </h2>
     <div class="mb-6">
         <!-- Doctor of Philosophy -->
         <h3 class="text-lg font-semibold text-secondary-color">Doctor of Philosophy (PhD) en Électrique</h3>
@@ -222,10 +353,10 @@
 
 
           <!-- Projects -->
-<section class="vivid-card p-8 md:col-span-2">
-    <h2 class="text-3xl font-bold mb-8 section-icon text-center">
-        <i class="fas fa-project-diagram mr-4"></i>Projects
-    </h2>
+          <section id="projects" class="vivid-card p-8 md:col-span-2">
+            <h2 class="text-3xl font-bold mb-8 section-icon text-center">
+                <i class="fas fa-project-diagram mr-4"></i>Projects
+            </h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
       
         <!-- Battery Project -->
@@ -314,10 +445,10 @@ class="project-card bg-white p-6 rounded-lg shadow-lg transition-all duration-30
 
 
           <!-- Contact -->
-<section class="vivid-card p-8 md:col-span-2 text-center">
-    <h2 class="text-3xl font-bold mb-8 section-icon">
-        <i class="fas fa-address-card mr-4 text-blue-500"></i>Contact
-    </h2>
+          <section id="contact" class="vivid-card p-8 md:col-span-2 text-center">
+            <h2 class="text-3xl font-bold mb-8 section-icon">
+                <i class="fas fa-address-card mr-4 text-blue-500"></i>Contact
+            </h2>
     <div class="space-y-2">
         <!-- Téléphone -->
         <div>
