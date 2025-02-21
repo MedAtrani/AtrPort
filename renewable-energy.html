@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCADA - Production Acide Phosphorique & DAP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        .metric-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+        .process-section {
+            border-left: 4px solid;
+        }
+        .section-phosphoric {
+            border-color: #3B82F6;
+        }
+        .section-dap {
+            border-color: #10B981;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        canvas {
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Modal pour les graphiques -->
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="chartTitle" class="text-2xl font-bold mb-4"></h2>
+            <div class="flex flex-col space-y-4">
+                <canvas id="realTimeChart"></canvas>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-2">Modifier la Consigne</h3>
+                    <div class="flex items-center space-x-4">
+                        <input type="number" id="setpointInput" class="border rounded px-3 py-2 w-32">
+                        <button onclick="updateSetpoint()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Appliquer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="min-h-screen p-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        Production Acide Phosphorique & DAP
+                    </h1>
+                    <p class="text-gray-600 mt-2">Système de Contrôle et Supervision</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                        <span class="text-sm text-gray-600">Système en Ligne</span>
+                    </div>
+                    <button onclick="generateReport()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                        Générer Rapport
+                    </button>
+                </div>
+            </div>
+
+            <!-- Acide Phosphorique Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold text-blue-600 mb-4">Production Acide Phosphorique</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="phosphoric-metrics">
+                    <!-- Métriques injectées par JS -->
+                </div>
+            </div>
+
+            <!-- DAP Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold text-green-600 mb-4">Production DAP</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="dap-metrics">
+                    <!-- Métriques injectées par JS -->
+                </div>
+            </div>
+
+            <!-- Monitoring Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Alarmes -->
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h2 class="text-xl font-semibold mb-4">Alarmes Actives</h2>
+                    <div class="space-y-3" id="alarms">
+                        <!-- Alarmes injectées par JS -->
+                    </div>
+                </div>
+
+                <!-- Analyses Laboratoire -->
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h2 class="text-xl font-semibold mb-4">Dernières Analyses Laboratoire</h2>
+                    <div class="space-y-4" id="lab-analysis">
+                        <!-- Analyses injectées par JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Indicators -->
+            <div class="bg-white rounded-lg p-6 shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Indicateurs de Performance</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="kpi-metrics">
+                    <!-- KPIs injectés par JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration des métriques pour l'acide phosphorique
+        const phosphoricMetrics = [
+            {
+                id: 'phosphate-size',
+                title: 'Granulométrie Phosphate',
+                unit: 'μm',
+                icon: '📏',
+                min: 180,
+                max: 220,
+                warningThreshold: 200,
+                target: 200
+            },
+            {
+                id: 'p2o5-content',
+                title: 'Teneur P2O5',
+                unit: '%',
+                icon: '🧪',
+                min: 28,
+                max: 36,
+                warningThresholdLow: 30,
+                warningThresholdHigh: 35,
+                target: 32.5
+            },
+            {
+                id: 'moisture',
+                title: 'Humidité',
+                unit: '%',
+                icon: '💧',
+                min: 7,
+                max: 13,
+                warningThresholdLow: 8,
+                warningThresholdHigh: 12,
+                target: 10
+            },
+            {
+                id: 'attack-temp',
+                title: 'Température Attaque',
+                unit: '°C',
+                icon: '🌡️',
+                min: 70,
+                max: 90,
+                warningThresholdLow: 75,
+                warningThresholdHigh: 85,
+                target: 80
+            },
+            {
+                id: 'h2so4-conc',
+                title: 'Concentration H2SO4',
+                unit: '%',
+                icon: '⚗️',
+                min: 96,
+                max: 99,
+                warningThresholdLow: 97.5,
+                target: 98
+            },
+            {
+                id: 'retention-time',
+                title: 'Temps Rétention',
+                unit: 'h',
+                icon: '⏱️',
+                min: 3,
+                max: 9,
+                warningThresholdLow: 4,
+                warningThresholdHigh: 8,
+                target: 6
+            }
+        ];
+
+        // Configuration des métriques pour le DAP
+        const dapMetrics = [
+            {
+                id: 'preneutral-temp',
+                title: 'Température Pré-neutralisation',
+                unit: '°C',
+                icon: '🌡️',
+                min: 110,
+                max: 130,
+                warningThresholdLow: 115,
+                warningThresholdHigh: 125,
+                target: 120
+            },
+            {
+                id: 'preneutral-ph',
+                title: 'pH Pré-neutralisation',
+                unit: 'pH',
+                icon: '📊',
+                min: 5.5,
+                max: 6.5,
+                warningThresholdLow: 5.8,
+                warningThresholdHigh: 6.2,
+                target: 6.0
+            },
+            {
+                id: 'drum-speed',
+                title: 'Vitesse Tambour',
+                unit: 'rpm',
+                icon: '⚙️',
+                min: 14,
+                max: 21,
+                warningThresholdLow: 15,
+                warningThresholdHigh: 20,
+                target: 17.5
+            },
+            {
+                id: 'dryer-temp',
+                title: 'Température Séchage',
+                unit: '°C',
+                icon: '🔥',
+                min: 380,
+                max: 470,
+                warningThresholdLow: 400,
+                warningThresholdHigh: 450,
+                target: 425
+            },
+            {
+                id: 'product-moisture',
+                title: 'Humidité Produit',
+                unit: '%',
+                icon: '💧',
+                min: 0,
+                max: 2,
+                warningThresholdHigh: 1.5,
+                target: 1.0
+            },
+            {
+                id: 'product-temp',
+                title: 'Température Produit',
+                unit: '°C',
+                icon: '🌡️',
+                min: 35,
+                max: 50,
+                warningThresholdLow: 40,
+                warningThresholdHigh: 45,
+                target: 42.5
+            }
+        ];
+
+        // Configuration des KPIs
+        const kpiMetrics = [
+            {
+                id: 'global-yield',
+                title: 'Rendement Global',
+                unit: '%',
+                icon: '📈',
+                min: 93,
+                max: 97,
+                warningThresholdLow: 94,
+                target: 95
+            },
+            {
+                id: 'energy-consumption',
+                title: 'Consommation Électrique',
+                unit: 'kWh/t',
+                icon: '⚡',
+                min: 105,
+                max: 135,
+                warningThresholdHigh: 130,
+                target: 120
+            },
+            {
+                id: 'water-consumption',
+                title: 'Consommation Eau',
+                unit: 'm³/t',
+                icon: '💧',
+                min: 2.3,
+                max: 3.2,
+                warningThresholdHigh: 3.0,
+                target: 2.75
+            }
+        ];
+
+        let currentChart = null;
+        let currentMetric = null;
+        const historyLength = 20;
+        const metricHistory = new Map();
+        const modal = document.getElementById('chartModal');
+        const closeBtn = document.querySelector('.close');
+
+        // Fermer le modal
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+            if (currentChart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                if (currentChart) {
+                    currentChart.destroy();
+                    currentChart = null;
+                }
+            }
+        }
+
+        // Fonction pour mettre à jour la consigne
+        function updateSetpoint() {
+            const newSetpoint = parseFloat(document.getElementById('setpointInput').value);
+            if (!isNaN(newSetpoint) && currentMetric) {
+                currentMetric.target = newSetpoint;
+                alert(`Nouvelle consigne appliquée : ${newSetpoint} ${currentMetric.unit}`);
+            }
+        }
+
+        // Fonction pour générer une valeur aléatoire
+        function generateRandomValue(min, max) {
+            return Number((Math.random() * (max - min) + min).toFixed(2));
+        }
+
+        // Fonction pour créer une carte métrique avec événement de clic
+        function createMetricCard(metric, value) {
+            const isCritical = value > metric.criticalThreshold || value < (metric.criticalThresholdLow || -Infinity);
+            const isWarning = !isCritical && (
+                (metric.warningThresholdHigh && value > metric.warningThresholdHigh) ||
+                (metric.warningThresholdLow && value < metric.warningThresholdLow)
+            );
+
+            const statusColor = isCritical ? 'red' : isWarning ? 'yellow' : 'green';
+            const deviation = metric.target ? ((value - metric.target) / metric.target * 100).toFixed(1) : null;
+
+            const card = document.createElement('div');
+            card.className = `metric-card bg-white rounded-lg p-4 shadow-lg border-l-4 border-${statusColor}-500`;
+            card.innerHTML = `
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-gray-600 font-medium">${metric.title}</h3>
+                    <span class="text-xl">${metric.icon}</span>
+                </div>
+                <div class="flex items-baseline justify-between">
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900">${value}</p>
+                        <span class="text-sm text-gray-500">${metric.unit}</span>
+                    </div>
+                    ${deviation !== null ? `
+                        <span class="text-sm ${deviation > 0 ? 'text-red-500' : 'text-green-500'}">
+                            ${deviation > 0 ? '+' : ''}${deviation}%
+                        </span>
+                    ` : ''}
+                </div>
+            `;
+
+            // Ajouter l'événement de clic
+            card.onclick = () => showChart(metric);
+            return card.outerHTML;
+        }
+
+        // Fonction pour afficher le graphique
+        function showChart(metric) {
+            currentMetric = metric;
+            modal.style.display = "block";
+            document.getElementById('chartTitle').textContent = metric.title;
+            document.getElementById('setpointInput').value = metric.target;
+
+            if (!metricHistory.has(metric.id)) {
+                metricHistory.set(metric.id, []);
+            }
+
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            const ctx = document.getElementById('realTimeChart').getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array(historyLength).fill(''),
+                    datasets: [{
+                        label: 'Valeur Actuelle',
+                        data: metricHistory.get(metric.id),
+                        borderColor: 'rgb(59, 130, 246)',
+                        tension: 0.4
+                    }, {
+                        label: 'Consigne',
+                        data: Array(historyLength).fill(metric.target),
+                        borderColor: 'rgb(34, 197, 94)',
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    animation: {
+                        duration: 0
+                    },
+                    scales: {
+                        y: {
+                            min: metric.min,
+                            max: metric.max
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fonction pour générer le rapport
+        function generateReport() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            
+            // En-tête
+            doc.setFontSize(20);
+            doc.text('Rapport de Production', pageWidth/2, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text(`Date: ${new Date().toLocaleString()}`, 20, 30);
+
+            // Métriques
+            let y = 50;
+            doc.setFontSize(16);
+            doc.text('Acide Phosphorique', 20, y);
+            y += 10;
+            
+            phosphoricMetrics.forEach(metric => {
+                const value = generateRandomValue(metric.min, metric.max);
+                doc.setFontSize(12);
+                doc.text(`${metric.title}: ${value} ${metric.unit}`, 30, y);
+                y += 7;
+            });
+
+            y += 10;
+            doc.setFontSize(16);
+            doc.text('DAP', 20, y);
+            y += 10;
+
+            dapMetrics.forEach(metric => {
+                const value = generateRandomValue(metric.min, metric.max);
+                doc.setFontSize(12);
+                doc.text(`${metric.title}: ${value} ${metric.unit}`, 30, y);
+                y += 7;
+            });
+
+            // Sauvegarder le PDF
+            doc.save('rapport-production.pdf');
+        }
+
+        // Fonction pour mettre à jour les alarmes
+        function updateAlarms(phosphoricMetrics, dapMetrics) {
+            const alarms = [];
+            
+            // Vérification des alarmes pour chaque métrique
+            [...phosphoricMetrics, ...dapMetrics].forEach(metric => {
+                const value = generateRandomValue(metric.min, metric.max);
+                if (metric.warningThresholdHigh && value > metric.warningThresholdHigh) {
+                    alarms.push({
+                        message: `${metric.title} trop élevé(e) : ${value} ${metric.unit}`,
+                        type: 'warning'
+                    });
+                }
+                if (metric.warningThresholdLow && value < metric.warningThresholdLow) {
+                    alarms.push({
+                        message: `${metric.title} trop bas(se) : ${value} ${metric.unit}`,
+                        type: 'warning'
+                    });
+                }
+            });
+
+            const alarmsHtml = alarms.map(alarm => `
+                <div class="flex items-center ${alarm.type === 'critical' ? 'text-red-500' : 'text-yellow-500'}">
+                    <span class="mr-2">⚠️</span>
+                    <span>${alarm.message}</span>
+                </div>
+            `).join('') || '<p class="text-gray-500">Aucune alarme active</p>';
+
+            document.getElementById('alarms').innerHTML = alarmsHtml;
+        }
+
+        // Fonction pour mettre à jour les analyses laboratoire
+        function updateLabAnalysis() {
+            const analyses = [
+                { name: 'Titre P2O5', value: generateRandomValue(45.5, 46.5) + '%' },
+                { name: 'Acidité libre', value: generateRandomValue(0.8, 1.2) + '%' },
+                { name: 'SO4 résiduel', value: generateRandomValue(0.5, 1.0) + '%' },
+                { name: 'Granulométrie 2-4mm', value: generateRandomValue(90, 95) + '%' }
+            ];
+
+            const analysisHtml = analyses.map(analysis => `
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600">${analysis.name}</span>
+                    <span class="font-semibold">${analysis.value}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('lab-analysis').innerHTML = analysisHtml;
+        }
+
+        // Fonction pour mettre à jour toutes les métriques
+        function updateMetrics() {
+            const allMetrics = [...phosphoricMetrics, ...dapMetrics, ...kpiMetrics];
+            
+            allMetrics.forEach(metric => {
+                const value = generateRandomValue(metric.min, metric.max);
+                if (!metricHistory.has(metric.id)) {
+                    metricHistory.set(metric.id, Array(historyLength).fill(value));
+                } else {
+                    const history = metricHistory.get(metric.id);
+                    history.push(value);
+                    if (history.length > historyLength) {
+                        history.shift();
+                    }
+                }
+
+                if (currentChart && currentMetric && currentMetric.id === metric.id) {
+                    currentChart.data.datasets[0].data = metricHistory.get(metric.id);
+                    currentChart.update();
+                }
+            });
+
+            // Mise à jour des métriques d'acide phosphorique
+            let phosphoricHtml = '';
+            phosphoricMetrics.forEach(metric => {
+                const value = generateRandomValue(metric.min, metric.max);
+                phosphoricHtml += createMetricCard(metric, value);
+            });
+            document.getElementById('phosphoric-metrics').innerHTML = phosphoricHtml;
+
+            // Mise à jour des métriques DAP
+            let dapHtml = '';
+            dapMetrics.forEach(metric => {
+                const value = generateRandomValue(metric.min, metric.max);
+                dapHtml += createMetricCard(metric, value);
+            });
+            document.getElementById('dap-metrics').innerHTML = dapHtml;
+
+            // Mise à jour des KPIs
+            let kpiHtml = '';
+            kpiMetrics.forEach(metric => {
+                const value = generateRandomValue(metric.min, metric.max);
+                kpiHtml += createMetricCard(metric, value);
+            });
+            document.getElementById('kpi-metrics').innerHTML = kpiHtml;
+
+            // Mise à jour des alarmes et analyses
+            updateAlarms(phosphoricMetrics, dapMetrics);
+            updateLabAnalysis();
+        }
+
+        // Mise à jour initiale et configuration de l'intervalle
+        updateMetrics();
+        setInterval(updateMetrics, 3000);
+    </script>
+</body>
+</html>
